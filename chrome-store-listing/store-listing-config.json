@@ -1,0 +1,135 @@
+{
+  "basicInfo": {
+    "name": "Quick Text Copy",
+    "summary": "一鍵複製頁面標題和網址，格式化為「標題 網址」，提升工作效率的必備工具",
+    "detailedDescription": "厭倦了手動選取網頁標題和複製網址的繁瑣步驟嗎？Quick Text Copy 讓您一鍵搞定！\n\n✨ 核心功能\n• 一鍵複製頁面資訊 - 點擊擴充功能圖示，立即複製當前頁面的標題和網址\n• 智慧格式化 - 自動格式化為「標題 網址」格式，方便分享和記錄\n• 極速操作體驗 - 背景執行，無彈出視窗干擾，通常在 1 秒內完成複製\n\n🎯 使用場景\n• 學術研究與筆記 - 快速收集參考資料來源，建立文獻清單\n• 工作協作 - 分享有用的網頁連結給同事，建立專案資源清單\n• 社群分享 - 在社交媒體分享有趣內容，製作推薦清單\n• 個人整理 - 建立個人書籤和筆記，整理學習資源\n\n🔒 隱私與安全\n• 完全本地處理，不收集任何使用者資料\n• 最小權限原則，僅請求必要權限\n• 使用最新的 Manifest V3 架構\n\n🚀 立即開始使用\n1. 安裝擴充功能\n2. 前往任意網頁\n3. 點擊工具列中的 Quick Text Copy 圖示\n4. 到任何地方貼上（Ctrl+V 或 Cmd+V）\n\n讓 Quick Text Copy 成為您提升工作效率的得力助手！",
+    "category": "productivity",
+    "language": "zh-TW",
+    "version": "1.0.0"
+  },
+  "media": {
+    "icon": "icons/icon128.png",
+    "screenshots": [
+      {
+        "filename": "screenshot-1-extension-icon.png",
+        "description": "Quick Text Copy 擴充功能圖示在 Chrome 工具列中的位置"
+      },
+      {
+        "filename": "screenshot-2-before-after.png", 
+        "description": "使用前後對比：點擊圖示後自動複製格式化的頁面資訊"
+      },
+      {
+        "filename": "screenshot-3-multiple-examples.png",
+        "description": "多種網站的使用示例，展示一致的「標題 網址」格式"
+      }
+    ],
+    "promotional": null
+  },
+  "metadata": {
+    "keywords": [
+      "複製",
+      "文字",
+      "網址",
+      "標題", 
+      "生產力",
+      "工具",
+      "效率",
+      "分享",
+      "筆記",
+      "書籤",
+      "一鍵",
+      "快速",
+      "Chrome",
+      "擴充功能",
+      "copy",
+      "text",
+      "url",
+      "title",
+      "productivity",
+      "tool",
+      "efficiency",
+      "share",
+      "note",
+      "bookmark",
+      "quick",
+      "fast",
+      "extension"
+    ],
+    "tags": [
+      "生產力工具",
+      "文字處理", 
+      "網址複製",
+      "工作效率",
+      "筆記工具",
+      "分享工具"
+    ],
+    "website": "",
+    "supportEmail": "",
+    "privacyPolicy": "本擴充功能不收集任何使用者資料。所有操作均在本地瀏覽器中執行，不會傳送任何資訊到外部伺服器。我們僅請求必要的 activeTab 和 scripting 權限來執行複製功能。",
+    "supportedLanguages": ["zh-TW", "zh-CN", "en", "ja", "ko"],
+    "minimumChromeVersion": "88"
+  },
+  "pricing": {
+    "type": "free",
+    "price": 0,
+    "currency": "USD"
+  },
+  "distribution": {
+    "visibility": "public",
+    "regions": "worldwide",
+    "ageRating": "everyone"
+  },
+  "permissions": {
+    "requested": [
+      "activeTab",
+      "scripting"
+    ],
+    "justification": {
+      "activeTab": "需要存取當前分頁的標題和網址資訊以進行複製操作",
+      "scripting": "需要在頁面中執行腳本來將文字複製到剪貼簿"
+    }
+  },
+  "technicalDetails": {
+    "manifestVersion": 3,
+    "architecture": "service-worker",
+    "fileSize": "約 25KB",
+    "supportedPlatforms": ["Windows", "macOS", "Linux", "Chrome OS"],
+    "browserCompatibility": {
+      "chrome": "88+",
+      "edge": "88+",
+      "opera": "74+"
+    }
+  },
+  "qualityAssurance": {
+    "tested": true,
+    "testingPlatforms": ["Windows 10", "macOS", "Ubuntu"],
+    "commonIssues": [],
+    "knownLimitations": [
+      "無法在 chrome:// 等瀏覽器內部頁面使用",
+      "需要使用者手動點擊擴充功能圖示"
+    ]
+  },
+  "marketing": {
+    "targetAudience": [
+      "學生和研究人員",
+      "辦公室工作者",
+      "內容創作者",
+      "社群媒體使用者",
+      "網頁開發者"
+    ],
+    "competitiveAdvantages": [
+      "極簡設計，一鍵操作",
+      "無需設定，安裝即用",
+      "完全免費，無廣告",
+      "隱私友善，本地處理",
+      "格式統一，便於整理"
+    ],
+    "useCases": [
+      "學術論文引用整理",
+      "工作會議資料收集",
+      "社群媒體內容分享",
+      "個人書籤管理",
+      "專案資源整理"
+    ]
+  }
+}

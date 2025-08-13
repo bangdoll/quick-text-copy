@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Text Copy - 發佈後監控儀表板</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-right: 0.5rem;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .metric-value {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .metric-value.good {
+            color: #38a169;
+        }
+
+        .metric-value.warning {
+            color: #d69e2e;
+        }
+
+        .metric-value.critical {
+            color: #e53e3e;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-good {
+            background-color: #38a169;
+        }
+
+        .status-warning {
+            background-color: #d69e2e;
+        }
+
+        .status-critical {
+            background-color: #e53e3e;
+        }
+
+        .alert-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .alert-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+
+        .alert-warning {
+            background-color: #fffbeb;
+            border-left-color: #d69e2e;
+        }
+
+        .alert-critical {
+            background-color: #fed7d7;
+            border-left-color: #e53e3e;
+        }
+
+        .alert-time {
+            font-size: 0.8rem;
+            color: #718096;
+            margin-top: 0.25rem;
+        }
+
+        .chart-placeholder {
+            height: 200px;
+            background: linear-gradient(45deg, #f7fafc 25%, transparent 25%),
+                        linear-gradient(-45deg, #f7fafc 25%, transparent 25%),
+                        linear-gradient(45deg, transparent 75%, #f7fafc 75%),
+                        linear-gradient(-45deg, transparent 75%, #f7fafc 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a0aec0;
+            font-weight: 500;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #4299e1;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3182ce;
+        }
+
+        .btn-secondary {
+            background-color: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-secondary:hover {
+            background-color: #cbd5e0;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #718096;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 發佈後監控儀表板</h1>
+        <p>Quick Text Copy 擴充功能監控中心</p>
+    </div>
+
+    <div class="container">
+        <div class="dashboard-grid">
+            <!-- 使用統計卡片 -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">📈</span>
+                    <h2 class="card-title">使用統計</h2>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">總安裝數</span>
+                    <span class="metric-value good" id="total-installs">5,830</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">活躍使用者</span>
+                    <span class="metric-value good" id="active-users">1,972</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">每日活躍使用者</span>
+                    <span class="metric-value good" id="daily-users">225</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">卸載數</span>
+                    <span class="metric-value warning" id="uninstalls">17</span>
+                </div>
+            </div>
+
+            <!-- 評價監控卡片 -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">⭐</span>
+                    <h2 class="card-title">使用者評價</h2>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">平均評分</span>
+                    <span class="metric-value critical" id="average-rating">2.36/5.0</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">總評價數</span>
+                    <span class="metric-value" id="total-reviews">250</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">5星評價</span>
+                    <span class="metric-value good" id="five-star">45</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">1星評價</span>
+                    <span class="metric-value critical" id="one-star">89</span>
+                </div>
+            </div>
+
+            <!-- 效能監控卡片 -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">⚡</span>
+                    <h2 class="card-title">效能指標</h2>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">記憶體使用</span>
+                    <span class="metric-value good" id="memory-usage">49MB</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">CPU 使用</span>
+                    <span class="metric-value warning" id="cpu-usage">11.30%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">平均回應時間</span>
+                    <span class="metric-value good" id="response-time">921ms</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">當機率</span>
+                    <span class="metric-value good" id="crash-rate">0.008%</span>
+                </div>
+            </div>
+
+            <!-- 錯誤監控卡片 -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">🐛</span>
+                    <h2 class="card-title">錯誤監控</h2>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">24小時錯誤數</span>
+                    <span class="metric-value warning" id="error-count">4</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">當機次數</span>
+                    <span class="metric-value good" id="crash-count">0</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">錯誤率</span>
+                    <span class="metric-value good" id="error-rate">0.0004</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">最常見錯誤</span>
+                    <span class="metric-value" id="top-error">TypeError</span>
+                </div>
+            </div>
+
+            <!-- 版本資訊卡片 -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">📦</span>
+                    <h2 class="card-title">版本資訊</h2>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">當前版本</span>
+                    <span class="metric-value" id="current-version">1.0.1</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">發佈狀態</span>
+                    <span class="metric-value good">
+                        <span class="status-indicator status-good"></span>
+                        已發佈
+                    </span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">更新採用率</span>
+                    <span class="metric-value good" id="update-adoption">87%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">下次更新</span>
+                    <span class="metric-value" id="next-update">計劃中</span>
+                </div>
+            </div>
+
+            <!-- 警告通知卡片 -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">🚨</span>
+                    <h2 class="card-title">警告通知</h2>
+                </div>
+                <div class="alert-list">
+                    <div class="alert-item alert-critical">
+                        <strong>評分過低警告</strong>
+                        <div>平均評分 2.36 低於閾值 4.0</div>
+                        <div class="alert-time">2 小時前</div>
+                    </div>
+                    <div class="alert-item alert-warning">
+                        <strong>CPU 使用過高</strong>
+                        <div>CPU 使用 11.30% 超過閾值 10%</div>
+                        <div class="alert-time">30 分鐘前</div>
+                    </div>
+                    <div class="alert-item alert-critical">
+                        <strong>負面評價增加</strong>
+                        <div>負面評價數量 89 超過閾值 5</div>
+                        <div class="alert-time">1 小時前</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 趨勢圖表區域 -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">📊</span>
+                <h2 class="card-title">趨勢圖表</h2>
+            </div>
+            <div class="chart-placeholder">
+                📈 圖表功能開發中 - 將顯示安裝數、評分、效能等趨勢
+            </div>
+        </div>
+
+        <!-- 操作按鈕 -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="refreshData()">🔄 重新整理資料</button>
+            <button class="btn btn-secondary" onclick="exportReport()">📊 匯出報告</button>
+            <button class="btn btn-secondary" onclick="viewSupport()">🎫 查看支援票據</button>
+            <button class="btn btn-secondary" onclick="manageVersion()">📦 版本管理</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2024 Quick Text Copy - 發佈後監控系統</p>
+        <p>最後更新: <span id="last-update"></span></p>
+    </div>
+
+    <script>
+        // 更新最後更新時間
+        document.getElementById('last-update').textContent = new Date().toLocaleString('zh-TW');
+
+        // 重新整理資料
+        function refreshData() {
+            // 模擬資料重新載入
+            const loadingElements = document.querySelectorAll('.metric-value');
+            loadingElements.forEach(el => {
+                el.style.opacity = '0.5';
+            });
+
+            setTimeout(() => {
+                loadingElements.forEach(el => {
+                    el.style.opacity = '1';
+                });
+                document.getElementById('last-update').textContent = new Date().toLocaleString('zh-TW');
+                alert('✅ 資料已重新整理');
+            }, 1000);
+        }
+
+        // 匯出報告
+        function exportReport() {
+            const reportData = {
+                timestamp: new Date().toISOString(),
+                usage: {
+                    totalInstalls: document.getElementById('total-installs').textContent,
+                    activeUsers: document.getElementById('active-users').textContent,
+                    dailyUsers: document.getElementById('daily-users').textContent
+                },
+                reviews: {
+                    averageRating: document.getElementById('average-rating').textContent,
+                    totalReviews: document.getElementById('total-reviews').textContent
+                },
+                performance: {
+                    memoryUsage: document.getElementById('memory-usage').textContent,
+                    cpuUsage: document.getElementById('cpu-usage').textContent,
+                    responseTime: document.getElementById('response-time').textContent
+                }
+            };
+
+            const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `monitoring-report-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // 查看支援票據
+        function viewSupport() {
+            alert('🎫 支援票據管理功能\n\n將開啟支援系統管理介面...');
+        }
+
+        // 版本管理
+        function manageVersion() {
+            alert('📦 版本管理功能\n\n將開啟版本更新管理介面...');
+        }
+
+        // 自動重新整理 (每5分鐘)
+        setInterval(() => {
+            console.log('自動重新整理監控資料...');
+            // 這裡可以加入實際的資料更新邏輯
+        }, 5 * 60 * 1000);
+    </script>
+</body>
+</html>

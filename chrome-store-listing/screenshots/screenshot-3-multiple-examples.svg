@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1280" height="800" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="1280" height="800" fill="#f8f9fa"/>
+  
+  <!-- 標題 -->
+  <text x="640" y="50" font-family="Arial, sans-serif" font-size="24" fill="#202124" text-anchor="middle" font-weight="bold">Quick Text Copy 多種網站使用示例</text>
+  <text x="640" y="80" font-family="Arial, sans-serif" font-size="16" fill="#6c757d" text-anchor="middle">在不同類型的網站上都能完美運作，格式統一</text>
+  
+  <!-- 文字編輯器視窗 -->
+  <rect x="40" y="120" width="1200" height="640" fill="#2d3748" stroke="#4a5568" stroke-width="2" rx="8"/>
+  
+  <!-- 編輯器標題列 -->
+  <rect x="40" y="120" width="1200" height="40" fill="#4a5568" rx="8 8 0 0"/>
+  <text x="60" y="145" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0">記事本 - Quick Text Copy 收集的網頁資料</text>
+  
+  <!-- 編輯器內容區域 -->
+  <rect x="60" y="180" width="1160" height="560" fill="#1a202c"/>
+  
+  <!-- 複製的內容示例 -->
+  <text x="80" y="210" font-family="Arial, sans-serif" font-size="14" fill="#a0aec0">// 使用 Quick Text Copy 一鍵收集的網頁資料：</text>
+  
+  <!-- GitHub 示例 -->
+  <text x="80" y="250" font-family="Consolas, monospace" font-size="13" fill="#68d391">1. GitHub 開源專案：</text>
+  <text x="80" y="270" font-family="Consolas, monospace" font-size="13" fill="#e2e8f0">   microsoft/vscode https://github.com/microsoft/vscode</text>
+  
+  <!-- Stack Overflow 示例 -->
+  <text x="80" y="310" font-family="Consolas, monospace" font-size="13" fill="#68d391">2. Stack Overflow 問答：</text>
+  <text x="80" y="330" font-family="Consolas, monospace" font-size="13" fill="#e2e8f0">   How to use async/await in JavaScript https://stackoverflow.com/questions/...</text>
+  
+  <!-- 維基百科示例 -->
+  <text x="80" y="370" font-family="Consolas, monospace" font-size="13" fill="#68d391">3. 維基百科條目：</text>
+  <text x="80" y="390" font-family="Consolas, monospace" font-size="13" fill="#e2e8f0">   人工智慧 - 維基百科 https://zh.wikipedia.org/wiki/人工智慧</text>
+  
+  <!-- 新聞網站示例 -->
+  <text x="80" y="430" font-family="Consolas, monospace" font-size="13" fill="#68d391">4. 新聞文章：</text>
+  <text x="80" y="450" font-family="Consolas, monospace" font-size="13" fill="#e2e8f0">   科技新聞：AI 發展趨勢分析 https://news.example.com/ai-trends</text>
+  
+  <!-- 技術文件示例 -->
+  <text x="80" y="490" font-family="Consolas, monospace" font-size="13" fill="#68d391">5. 技術文件：</text>
+  <text x="80" y="510" font-family="Consolas, monospace" font-size="13" fill="#e2e8f0">   React 官方文件 - 快速開始 https://react.dev/learn</text>
+  
+  <!-- 部落格示例 -->
+  <text x="80" y="550" font-family="Consolas, monospace" font-size="13" fill="#68d391">6. 技術部落格：</text>
+  <text x="80" y="570" font-family="Consolas, monospace" font-size="13" fill="#e2e8f0">   JavaScript 最佳實踐指南 https://blog.example.com/js-best-practices</text>
+  
+  <!-- 學術論文示例 -->
+  <text x="80" y="610" font-family="Consolas, monospace" font-size="13" fill="#68d391">7. 學術資源：</text>
+  <text x="80" y="630" font-family="Consolas, monospace" font-size="13" fill="#e2e8f0">   機器學習基礎理論 https://arxiv.org/abs/example</text>
+  
+  <!-- 統計資訊 -->
+  <rect x="900" y="650" width="300" height="80" fill="#4a5568" rx="8"/>
+  <text x="1050" y="675" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle" font-weight="bold">收集統計</text>
+  <text x="920" y="700" font-family="Arial, sans-serif" font-size="12" fill="#a0aec0">• 7 個不同類型網站</text>
+  <text x="920" y="720" font-family="Arial, sans-serif" font-size="12" fill="#a0aec0">• 格式完全統一</text>
+  
+  <!-- 特色標籤 -->
+  <rect x="80" y="670" width="100" height="25" fill="#007bff" rx="12"/>
+  <text x="130" y="687" font-family="Arial, sans-serif" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="bold">格式統一</text>
+  
+  <rect x="200" y="670" width="100" height="25" fill="#28a745" rx="12"/>
+  <text x="250" y="687" font-family="Arial, sans-serif" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="bold">一鍵複製</text>
+  
+  <rect x="320" y="670" width="100" height="25" fill="#6f42c1" rx="12"/>
+  <text x="370" y="687" font-family="Arial, sans-serif" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="bold">廣泛相容</text>
+</svg>

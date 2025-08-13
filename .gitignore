@@ -1,0 +1,91 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+build/
+dist/
+extension-package/
+*.zip
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs/
+*.log
+monitoring-data/
+monitoring-reports/
+performance-alerts/
+
+# Chrome Store related (sensitive)
+chrome-store-*.json
+chrome-store-*.md
+developer-account-*.json
+submission-data-*.json
+review-status-*.json
+*-compliance-report-*.json
+*-compliance-report-*.md
+
+# Test reports and temporary files
+test-results.json
+*-test-report*.json
+*-test-report*.md
+emergency-drill-*.log
+emergency-drill-report-*.json
+emergency-drill-report-*.md
+
+# Backup files
+backups/
+rejection-logs/
+rejection-solutions/
+support-data/
+support-templates/
+
+# Configuration files with sensitive data
+auto-monitor-config.json
+developer-account-config.json
+emergency-response-config.json
+extension-monitoring-config.json
+performance-monitor-config.json
+post-launch-config.json
+support-config.json
+update-config.json
+
+# Chrome Store submission files
+chrome-store-submission-*.json
+chrome-store-submission-*.md
+update-notes-*.json
+update-history.json
+
+# Temporary and cache files
+.cache/
+.tmp/
+temp/
+*.tmp
+*.temp
+
+# Package files (will be generated)
+quick-text-copy-*.zip

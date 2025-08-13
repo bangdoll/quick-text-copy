@@ -1,0 +1,12 @@
+{
+  "buildTime": "2025-07-31T16:33:18.190Z",
+  "extensionName": "Quick Text Copy",
+  "version": "1.0.1",
+  "packageFile": "quick-text-copy-extension.zip",
+  "packageSize": "0.02 MB",
+  "coreFiles": 3,
+  "iconFiles": 4,
+  "totalFiles": 7,
+  "manifestVersion": 3,
+  "readyForStore": true
+}

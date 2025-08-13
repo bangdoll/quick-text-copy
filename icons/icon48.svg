@@ -1,0 +1,51 @@
+<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient48" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#357ABD;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="copyGradient48" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.95" />
+      <stop offset="100%" style="stop-color:#F0F8FF;stop-opacity:0.9" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景圓形 -->
+  <circle cx="24" cy="24" r="21" 
+          fill="url(#bgGradient48)" stroke="#2C5282" stroke-width="3"/>
+  
+  <!-- 文件/頁面圖示 (背景) -->
+  <rect x="7.199999999999999" y="12" 
+        width="16.799999999999997" height="24" 
+        fill="url(#copyGradient48)" stroke="#2C5282" stroke-width="2.4000000000000004" 
+        rx="1.44"/>
+  
+  <!-- 複製的文件 (前景) -->
+  <rect x="12" y="7.199999999999999" 
+        width="16.799999999999997" height="24" 
+        fill="url(#copyGradient48)" stroke="#2C5282" stroke-width="2.4000000000000004" 
+        rx="1.44"/>
+  
+  <!-- 文字線條 -->
+  <line x1="14.399999999999999" y1="13.440000000000001" 
+        x2="24.96" y2="13.440000000000001" 
+        stroke="#4A90E2" stroke-width="2.4000000000000004" stroke-linecap="round"/>
+  <line x1="14.399999999999999" y1="18.240000000000002" 
+        x2="26.400000000000002" y2="18.240000000000002" 
+        stroke="#4A90E2" stroke-width="2.4000000000000004" stroke-linecap="round"/>
+  <line x1="14.399999999999999" y1="23.04" 
+        x2="24" y2="23.04" 
+        stroke="#4A90E2" stroke-width="2.4000000000000004" stroke-linecap="round"/>
+  
+  <!-- 複製箭頭/指示器 -->
+  <path d="M 32.64 34.56 
+           L 37.44 36.96 
+           L 32.64 39.36 
+           Z" 
+        fill="#FFFFFF" stroke="#2C5282" stroke-width="1.7999999999999998"/>
+  
+  <!-- 小的 "C" 字母表示複製 (Copy) -->
+  <text x="35.04" y="43.2" 
+        font-family="Arial, sans-serif" font-size="8" 
+        font-weight="bold" fill="#FFFFFF" text-anchor="middle">C</text>
+</svg>

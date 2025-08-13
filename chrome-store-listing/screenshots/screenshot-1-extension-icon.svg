@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1280" height="800" xmlns="http://www.w3.org/2000/svg">
+  <!-- 瀏覽器視窗背景 -->
+  <rect width="1280" height="800" fill="#f8f9fa"/>
+  
+  <!-- 瀏覽器標題列 -->
+  <rect width="1280" height="80" fill="#e9ecef"/>
+  <text x="20" y="50" font-family="Arial, sans-serif" font-size="16" fill="#495057">Chrome 瀏覽器</text>
+  
+  <!-- 網址列 -->
+  <rect x="20" y="90" width="1000" height="40" fill="#ffffff" stroke="#dee2e6" stroke-width="1" rx="20"/>
+  <text x="40" y="115" font-family="Arial, sans-serif" font-size="14" fill="#6c757d">https://www.google.com</text>
+  
+  <!-- 工具列 -->
+  <rect x="1030" y="90" width="230" height="40" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  
+  <!-- 擴充功能圖示區域 -->
+  <rect x="1180" y="95" width="30" height="30" fill="#007bff" rx="4"/>
+  <text x="1190" y="115" font-family="Arial, sans-serif" font-size="12" fill="#ffffff" font-weight="bold">QTC</text>
+  
+  <!-- 紅色圓圈標示 -->
+  <circle cx="1195" cy="110" r="25" fill="none" stroke="#dc3545" stroke-width="3"/>
+  
+  <!-- 箭頭指示 -->
+  <path d="M1150 110 L1170 110" stroke="#dc3545" stroke-width="3" marker-end="url(#arrowhead)"/>
+  
+  <!-- 箭頭標記定義 -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#dc3545"/>
+    </marker>
+  </defs>
+  
+  <!-- 說明文字 -->
+  <text x="1050" y="80" font-family="Arial, sans-serif" font-size="14" fill="#dc3545" font-weight="bold">Quick Text Copy</text>
+  <text x="1080" y="65" font-family="Arial, sans-serif" font-size="12" fill="#6c757d">點擊此圖示</text>
+  
+  <!-- 網頁內容區域 -->
+  <rect x="20" y="140" width="1240" height="640" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  
+  <!-- Google 首頁模擬 -->
+  <text x="640" y="300" font-family="Arial, sans-serif" font-size="48" fill="#4285f4" text-anchor="middle" font-weight="bold">Google</text>
+  
+  <!-- 搜尋框 -->
+  <rect x="440" y="320" width="400" height="50" fill="#ffffff" stroke="#dadce0" stroke-width="2" rx="25"/>
+  
+  <!-- 搜尋按鈕 -->
+  <rect x="540" y="390" width="100" height="40" fill="#f8f9fa" stroke="#dadce0" stroke-width="1" rx="4"/>
+  <text x="590" y="415" font-family="Arial, sans-serif" font-size="14" fill="#3c4043" text-anchor="middle">Google 搜尋</text>
+  
+  <rect x="660" y="390" width="100" height="40" fill="#f8f9fa" stroke="#dadce0" stroke-width="1" rx="4"/>
+  <text x="710" y="415" font-family="Arial, sans-serif" font-size="14" fill="#3c4043" text-anchor="middle">好手氣</text>
+  
+  <!-- 標題 -->
+  <text x="640" y="200" font-family="Arial, sans-serif" font-size="24" fill="#202124" text-anchor="middle" font-weight="bold">Quick Text Copy 擴充功能圖示位置</text>
+  <text x="640" y="230" font-family="Arial, sans-serif" font-size="16" fill="#5f6368" text-anchor="middle">在 Chrome 工具列中找到並點擊 Quick Text Copy 圖示</text>
+</svg>
