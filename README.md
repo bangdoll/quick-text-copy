@@ -1,6 +1,6 @@
 # Quick Text Copy - Chrome Extension
 
-[![Version](https://img.shields.io/badge/version-1.0.4-blue.svg)](https://github.com/bangdoll/quick-text-copy)
+[![Version](https://img.shields.io/badge/version-1.0.5-blue.svg)](https://github.com/bangdoll/quick-text-copy)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Available-brightgreen.svg)](https://chrome.google.com/webstore)
 

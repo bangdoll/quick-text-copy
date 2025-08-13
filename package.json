@@ -1,6 +1,6 @@
 {
   "name": "quick-text-copy",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A powerful Chrome extension with quick text copy and OpenCC Simplified to Traditional Chinese conversion features",
   "main": "service-worker.js",
   "homepage": "https://github.com/bangdoll/quick-text-copy",

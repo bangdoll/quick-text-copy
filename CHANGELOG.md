@@ -1,5 +1,31 @@
 # 更新日誌
 
+## [1.0.5] - 2025-01-13
+
+### 🔄 OpenCC Chrome 擴充功能整合
+- ✅ **新增瀏覽器版 OpenCC**: 專為 Chrome 擴充功能設計的簡體轉繁體功能
+- ✅ **右鍵選單支援**: 新增「複製頁面資訊（轉繁體）」選項
+- ✅ **智慧轉換**: 自動檢測簡體字並轉換
+- ✅ **通知系統**: 複製成功時顯示通知
+
+### 🛠️ 技術改進
+- 新增 `opencc-browser.js` - 瀏覽器環境專用轉換器
+- 新增 `service-worker-with-opencc.js` - 整合 OpenCC 的服務工作者
+- 新增 `contextMenus` 和 `notifications` 權限
+- 創建 `quick-text-copy-with-opencc.zip` 完整功能包
+
+### 📚 文檔更新
+- 新增 `OPENCC_CHROME_EXTENSION_GUIDE.md` - Chrome 擴充功能使用指南
+- 新增 `test-opencc-browser.html` - 瀏覽器版本測試頁面
+- 更新使用說明和故障排除指南
+
+### 🎯 轉換效果
+- `软件` → `軟體`
+- `计算机程序` → `計算機程式`
+- `网络应用` → `網路應用`
+- `数据处理` → `資料處理`
+- `用户界面` → `使用者介面`
+
 ## [1.0.4] - 2025-01-11
 
 ### 🔧 重要修正
