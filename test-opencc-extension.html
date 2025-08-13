@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>你以为智能表可以取代传统腕表？新款卡西欧 比智能表還要强 - 測試頁面</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #007acc;
+            padding-bottom: 10px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #007acc;
+        }
+        .simplified-text {
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid #ffeaa7;
+        }
+        .instruction {
+            background: #d4edda;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border: 1px solid #c3e6cb;
+        }
+        .expected-result {
+            background: #e2e3e5;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid #d6d8db;
+            font-family: monospace;
+        }
+        code {
+            background: #f1f3f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 OpenCC 擴充功能測試頁面</h1>
+        
+        <div class="instruction">
+            <h3>📋 測試說明</h3>
+            <p>這個頁面專門用來測試 OpenCC 版本的 Quick Text Copy 擴充功能。</p>
+            <p><strong>測試步驟：</strong></p>
+            <ol>
+                <li>安裝 <code>quick-text-copy-opencc-v1.0.5.zip</code> 擴充功能</li>
+                <li>在這個頁面點擊擴充功能圖示</li>
+                <li>檢查剪貼簿中的內容是否正確轉換</li>
+            </ol>
+        </div>
+
+        <div class="test-section">
+            <h3>🎯 主要測試案例</h3>
+            <p>頁面標題包含以下簡體中文：</p>
+            <div class="simplified-text">
+                <strong>簡體文字：</strong>你以为智能表可以取代传统腕表？新款卡西欧 比智能表還要强
+            </div>
+            <p><strong>預期轉換結果：</strong></p>
+            <div class="expected-result">
+                你以為智慧錶可以取代傳統腕錶？新款卡西歐 比智慧錶還要強 - 測試頁面 https://example.com
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔍 OpenCC 轉換測試</h3>
+            <p>以下是更多簡體中文測試內容：</p>
+            
+            <div class="simplified-text">
+                <strong>科技詞彙：</strong><br>
+                • 这个软件很好用<br>
+                • 计算机程序开发<br>
+                • 数据处理系统<br>
+                • 用户界面设计<br>
+                • 网络应用程序
+            </div>
+
+            <div class="simplified-text">
+                <strong>手錶相關：</strong><br>
+                • 智能手表功能强大<br>
+                • 传统腕表工艺精湛<br>
+                • 卡西欧品牌历史悠久<br>
+                • 电子表显示清晰<br>
+                • 数字表操作简单
+            </div>
+
+            <div class="simplified-text">
+                <strong>常用詞彙：</strong><br>
+                • 你们觉得怎么样？<br>
+                • 这些功能还要继续开发<br>
+                • 软件设计需要优化<br>
+                • 用户体验很重要<br>
+                • 产品质量必须保证
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>✅ 驗證要點</h3>
+            <ul>
+                <li><strong>轉換準確性：</strong>所有簡體字都應該正確轉換為繁體字</li>
+                <li><strong>詞彙完整性：</strong>專業詞彙（如「智能表→智慧錶」）應該正確轉換</li>
+                <li><strong>格式正確：</strong>輸出格式應為「標題 網址」</li>
+                <li><strong>OpenCC 品質：</strong>使用真正的 OpenCC 進行高品質轉換</li>
+                <li><strong>載入速度：</strong>首次使用可能需要載入 OpenCC，請耐心等待</li>
+            </ul>
+        </div>
+
+        <div class="instruction">
+            <h3>🚀 開始測試</h3>
+            <p>點擊瀏覽器工具列中的 <strong>Quick Text Copy (OpenCC)</strong> 擴充功能圖示，然後檢查剪貼簿內容。</p>
+            <p><strong>注意：</strong>首次使用時，OpenCC 需要從 CDN 載入，可能需要幾秒鐘時間。</p>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 技術特點</h3>
+            <ul>
+                <li><strong>真正的 OpenCC：</strong>使用 opencc-js 1.0.5 版本</li>
+                <li><strong>高品質轉換：</strong>支援詞彙級別的智慧轉換</li>
+                <li><strong>動態載入：</strong>從 CDN 動態載入 OpenCC 函式庫</li>
+                <li><strong>Content Script：</strong>在頁面環境中執行轉換</li>
+                <li><strong>異步處理：</strong>支援 Promise 和異步轉換</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // 頁面載入完成後的提示
+        window.addEventListener('load', function() {
+            console.log('🧪 OpenCC 測試頁面已載入');
+            console.log('📋 頁面標題:', document.title);
+            console.log('🔗 頁面網址:', window.location.href);
+            console.log('✨ 請點擊擴充功能圖示開始測試');
+        });
+    </script>
+</body>
+</html>

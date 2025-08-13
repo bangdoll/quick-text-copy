@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Text Copy 圖示生成器</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .icon-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        .icon-item {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .icon-item h3 {
+            margin: 10px 0 5px 0;
+            color: #495057;
+        }
+        .download-section {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #e8f4fd;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+        .download-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .download-links a {
+            display: block;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        .download-links a:hover {
+            background-color: #0056b3;
+        }
+        .instructions {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .preview-bg {
+            display: inline-block;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 4px;
+        }
+        .bg-light { background-color: #f8f9fa; }
+        .bg-dark { background-color: #343a40; }
+        .bg-blue { background-color: #007bff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Quick Text Copy 圖示生成器</h1>
+        
+        <div class="instructions">
+            <h3>📋 使用說明</h3>
+            <p>1. 點擊下方的「生成圖示」按鈕</p>
+            <p>2. 等待圖示預覽載入</p>
+            <p>3. 點擊下載連結獲取 PNG 檔案</p>
+            <p>4. 將下載的檔案放到 <code>icons/</code> 資料夾中</p>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <button onclick="generateIcons()" style="
+                background-color: #28a745;
+                color: white;
+                border: none;
+                padding: 15px 30px;
+                font-size: 16px;
+                border-radius: 5px;
+                cursor: pointer;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            ">🚀 生成圖示</button>
+        </div>
+
+        <div id="iconPreview" class="icon-preview" style="display: none;">
+            <h2 style="width: 100%; text-align: center; margin-bottom: 20px;">圖示預覽</h2>
+        </div>
+
+        <div id="downloadSection" class="download-section" style="display: none;">
+            <h3>📥 下載圖示檔案</h3>
+            <p>點擊下方連結下載對應尺寸的 PNG 圖示檔案：</p>
+            <div id="downloadLinks" class="download-links"></div>
+        </div>
+
+        <div class="instructions">
+            <h3>🎯 設計理念</h3>
+            <p><strong>圖示特色：</strong></p>
+            <ul>
+                <li>🔵 <strong>藍色圓形背景</strong>：專業且易識別</li>
+                <li>📄 <strong>重疊文件圖示</strong>：表示複製功能</li>
+                <li>📝 <strong>文字線條</strong>：表示文字內容</li>
+                <li>➡️ <strong>複製箭頭</strong>：表示複製動作</li>
+                <li>🔤 <strong>"T" 字母</strong>：表示文字(Text)功能</li>
+            </ul>
+            <p><strong>顏色方案：</strong></p>
+            <ul>
+                <li>主色：藍色 (#4A90E2) - 專業、可信賴</li>
+                <li>輔色：白色 (#FFFFFF) - 清晰、簡潔</li>
+                <li>邊框：深藍 (#2C5282) - 增加對比度</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function generateTextCopyIcon(size) {
+            const iconSize = size;
+            const strokeWidth = Math.max(1, size / 16);
+            const fontSize = Math.max(8, size / 6);
+            
+            return `
+        <svg width="${iconSize}" height="${iconSize}" viewBox="0 0 ${iconSize} ${iconSize}" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bgGradient${size}" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#357ABD;stop-opacity:1" />
+            </linearGradient>
+            <linearGradient id="copyGradient${size}" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.95" />
+              <stop offset="100%" style="stop-color:#F0F8FF;stop-opacity:0.9" />
+            </linearGradient>
+          </defs>
+          
+          <!-- 背景圓形 -->
+          <circle cx="${iconSize/2}" cy="${iconSize/2}" r="${iconSize/2 - strokeWidth}" 
+                  fill="url(#bgGradient${size})" stroke="#2C5282" stroke-width="${strokeWidth}"/>
+          
+          <!-- 文件/頁面圖示 (背景) -->
+          <rect x="${iconSize * 0.15}" y="${iconSize * 0.25}" 
+                width="${iconSize * 0.35}" height="${iconSize * 0.5}" 
+                fill="url(#copyGradient${size})" stroke="#2C5282" stroke-width="${strokeWidth * 0.8}" 
+                rx="${iconSize * 0.03}"/>
+          
+          <!-- 複製的文件 (前景) -->
+          <rect x="${iconSize * 0.25}" y="${iconSize * 0.15}" 
+                width="${iconSize * 0.35}" height="${iconSize * 0.5}" 
+                fill="url(#copyGradient${size})" stroke="#2C5282" stroke-width="${strokeWidth * 0.8}" 
+                rx="${iconSize * 0.03}"/>
+          
+          <!-- 文字線條 -->
+          <line x1="${iconSize * 0.3}" y1="${iconSize * 0.28}" 
+                x2="${iconSize * 0.52}" y2="${iconSize * 0.28}" 
+                stroke="#4A90E2" stroke-width="${strokeWidth * 0.8}" stroke-linecap="round"/>
+          <line x1="${iconSize * 0.3}" y1="${iconSize * 0.38}" 
+                x2="${iconSize * 0.55}" y2="${iconSize * 0.38}" 
+                stroke="#4A90E2" stroke-width="${strokeWidth * 0.8}" stroke-linecap="round"/>
+          <line x1="${iconSize * 0.3}" y1="${iconSize * 0.48}" 
+                x2="${iconSize * 0.5}" y2="${iconSize * 0.48}" 
+                stroke="#4A90E2" stroke-width="${strokeWidth * 0.8}" stroke-linecap="round"/>
+          
+          <!-- 複製箭頭/指示器 -->
+          <path d="M ${iconSize * 0.68} ${iconSize * 0.72} 
+                   L ${iconSize * 0.78} ${iconSize * 0.77} 
+                   L ${iconSize * 0.68} ${iconSize * 0.82} 
+                   Z" 
+                fill="#FFFFFF" stroke="#2C5282" stroke-width="${strokeWidth * 0.6}"/>
+          
+          <!-- 小的 "C" 字母表示複製 (Copy) -->
+          <text x="${iconSize * 0.73}" y="${iconSize * 0.9}" 
+                font-family="Arial, sans-serif" font-size="${fontSize}" 
+                font-weight="bold" fill="#FFFFFF" text-anchor="middle">C</text>
+        </svg>`;
+        }
+
+        function generateIcons() {
+            const sizes = [16, 32, 48, 128];
+            const previewDiv = document.getElementById('iconPreview');
+            const downloadSection = document.getElementById('downloadSection');
+            const downloadLinks = document.getElementById('downloadLinks');
+            
+            // 清空之前的內容
+            previewDiv.innerHTML = '<h2 style="width: 100%; text-align: center; margin-bottom: 20px;">圖示預覽</h2>';
+            downloadLinks.innerHTML = '';
+            
+            // 顯示區域
+            previewDiv.style.display = 'flex';
+            downloadSection.style.display = 'block';
+            
+            sizes.forEach(size => {
+                const svgContent = generateTextCopyIcon(size);
+                
+                // 建立預覽
+                const iconItem = document.createElement('div');
+                iconItem.className = 'icon-item';
+                iconItem.innerHTML = `
+                    <h3>${size}×${size}</h3>
+                    <div class="preview-bg bg-light">${svgContent}</div>
+                    <div class="preview-bg bg-dark">${svgContent}</div>
+                    <div class="preview-bg bg-blue">${svgContent}</div>
+                `;
+                previewDiv.appendChild(iconItem);
+                
+                // 建立 SVG Blob
+                const svgBlob = new Blob([svgContent], { type: 'image/svg+xml' });
+                const svgUrl = URL.createObjectURL(svgBlob);
+                
+                // 轉換為 PNG
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = size;
+                canvas.height = size;
+                
+                const img = new Image();
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0, size, size);
+                    
+                    // 轉換為 PNG 並建立下載連結
+                    canvas.toBlob(function(blob) {
+                        const pngUrl = URL.createObjectURL(blob);
+                        const pngLink = document.createElement('a');
+                        pngLink.href = pngUrl;
+                        pngLink.download = `icon${size}.png`;
+                        pngLink.textContent = `📥 下載 ${size}×${size} PNG`;
+                        downloadLinks.appendChild(pngLink);
+                    }, 'image/png');
+                };
+                
+                img.src = svgUrl;
+            });
+            
+            console.log('圖示生成完成！');
+        }
+    </script>
+</body>
+</html>
