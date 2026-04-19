@@ -1,0 +1,358 @@
+name: CI/CD 自動化測試與部署流程
+
+on:
+  push:
+    branches: [ main, develop ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+env:
+  EXTENSION_NAME: quick-text-copy
+  NODE_VERSION: '18'
+
+jobs:
+  # 第一階段：程式碼品質檢查
+  quality-check:
+    name: 程式碼品質檢查
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 檢出程式碼
+      uses: actions/checkout@v4
+      
+    - name: 設定 Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: 安裝依賴
+      run: npm ci
+      
+    - name: 執行 ESLint 檢查
+      run: npm run lint
+      
+    - name: 執行 Prettier 格式檢查
+      run: npm run format:check
+      
+    - name: 上傳品質檢查報告
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: quality-check-report
+        path: |
+          eslint-report.json
+          prettier-report.txt
+        retention-days: 7
+
+  # 第二階段：單元測試與整合測試
+  test:
+    name: 單元測試與整合測試
+    runs-on: ubuntu-latest
+    needs: quality-check
+    
+    steps:
+    - name: 檢出程式碼
+      uses: actions/checkout@v4
+      
+    - name: 設定 Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: 安裝依賴
+      run: npm ci
+      
+    - name: 執行單元測試
+      run: npm run test:unit
+      
+    - name: 執行整合測試
+      run: npm run test:integration
+      
+    - name: 生成測試覆蓋率報告
+      run: npm run test:coverage
+      
+    - name: 上傳測試報告
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-reports
+        path: |
+          coverage/
+          test-results.xml
+          junit.xml
+        retention-days: 30
+        
+    - name: 上傳覆蓋率到 Codecov
+      if: success()
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/lcov.info
+        flags: unittests
+        name: codecov-umbrella
+
+  # 第三階段：E2E 測試
+  e2e-test:
+    name: E2E 測試
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - name: 檢出程式碼
+      uses: actions/checkout@v4
+      
+    - name: 設定 Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: 安裝依賴
+      run: npm ci
+      
+    - name: 安裝 Playwright 瀏覽器
+      run: npx playwright install chromium
+      
+    - name: 執行 E2E 測試
+      run: npm run test:e2e
+      
+    - name: 上傳 E2E 測試報告
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: e2e-test-results
+        path: |
+          test-results/
+          playwright-report/
+        retention-days: 30
+        
+    - name: 上傳測試截圖
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: e2e-screenshots
+        path: test-results/screenshots/
+        retention-days: 7
+
+  # 第四階段：建置與打包
+  build:
+    name: 建置與打包
+    runs-on: ubuntu-latest
+    needs: e2e-test
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      package-name: ${{ steps.package.outputs.name }}
+    
+    steps:
+    - name: 檢出程式碼
+      uses: actions/checkout@v4
+      
+    - name: 設定 Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: 安裝依賴
+      run: npm ci
+      
+    - name: 執行簡繁轉換
+      run: npm run convert:zh
+      
+    - name: 建置生產版本
+      run: npm run build:prod
+      
+    - name: 讀取版本號
+      id: version
+      run: |
+        VERSION=$(node -p "require('./package.json').version")
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "版本號: $VERSION"
+        
+    - name: 打包擴充功能
+      id: package
+      run: |
+        npm run package
+        PACKAGE_NAME="${{ env.EXTENSION_NAME }}-v${{ steps.version.outputs.version }}.zip"
+        mv package.zip "$PACKAGE_NAME"
+        echo "name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
+        echo "打包檔案: $PACKAGE_NAME"
+        
+    - name: 驗證打包檔案
+      run: |
+        if [ ! -f "${{ steps.package.outputs.name }}" ]; then
+          echo "錯誤: 打包檔案不存在"
+          exit 1
+        fi
+        echo "打包檔案大小: $(du -h ${{ steps.package.outputs.name }} | cut -f1)"
+        
+    - name: 上傳建置成品
+      uses: actions/upload-artifact@v4
+      with:
+        name: extension-package
+        path: ${{ steps.package.outputs.name }}
+        retention-days: 90
+
+  # 第五階段：測試環境部署 (僅限 develop 分支)
+  deploy-test:
+    name: 測試環境部署
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    environment: testing
+    
+    steps:
+    - name: 檢出程式碼
+      uses: actions/checkout@v4
+      
+    - name: 下載建置成品
+      uses: actions/download-artifact@v4
+      with:
+        name: extension-package
+        
+    - name: 部署到測試環境
+      run: |
+        echo "部署版本 ${{ needs.build.outputs.version }} 到測試環境"
+        echo "檔案: ${{ needs.build.outputs.package-name }}"
+        # 這裡可以加入實際的部署邏輯
+        
+    - name: 通知測試群組
+      if: success()
+      run: |
+        curl -X POST "${{ secrets.WEBHOOK_URL }}" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "text": "🚀 新版本已部署到測試環境",
+            "attachments": [{
+              "color": "good",
+              "fields": [
+                {"title": "版本", "value": "${{ needs.build.outputs.version }}", "short": true},
+                {"title": "分支", "value": "${{ github.ref_name }}", "short": true},
+                {"title": "提交", "value": "${{ github.sha }}", "short": true},
+                {"title": "測試重點", "value": "請測試簡繁轉換功能和官網文章生成功能", "short": false}
+              ]
+            }]
+          }'
+          
+    - name: 部署失敗通知
+      if: failure()
+      run: |
+        curl -X POST "${{ secrets.WEBHOOK_URL }}" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "text": "❌ 測試環境部署失敗",
+            "attachments": [{
+              "color": "danger",
+              "fields": [
+                {"title": "版本", "value": "${{ needs.build.outputs.version }}", "short": true},
+                {"title": "分支", "value": "${{ github.ref_name }}", "short": true},
+                {"title": "錯誤", "value": "請檢查部署日誌", "short": false}
+              ]
+            }]
+          }'
+
+  # 第六階段：生產發布 (僅限版本標籤)
+  release:
+    name: 生產發布
+    runs-on: ubuntu-latest
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+    
+    steps:
+    - name: 檢出程式碼
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: 下載建置成品
+      uses: actions/download-artifact@v4
+      with:
+        name: extension-package
+        
+    - name: 生成 Changelog
+      id: changelog
+      run: |
+        # 獲取上一個標籤
+        PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+        if [ -z "$PREVIOUS_TAG" ]; then
+          PREVIOUS_TAG=$(git rev-list --max-parents=0 HEAD)
+        fi
+        
+        # 生成 changelog
+        echo "## 更新內容" > changelog.md
+        echo "" >> changelog.md
+        git log --pretty=format:"- %s (%h)" $PREVIOUS_TAG..HEAD >> changelog.md
+        echo "" >> changelog.md
+        echo "## 安裝說明" >> changelog.md
+        echo "1. 下載附件中的 ZIP 檔案" >> changelog.md
+        echo "2. 開啟 Chrome 瀏覽器，進入擴充功能管理頁面" >> changelog.md
+        echo "3. 開啟開發者模式" >> changelog.md
+        echo "4. 點擊「載入未封裝項目」並選擇解壓縮後的資料夾" >> changelog.md
+        echo "" >> changelog.md
+        echo "## 測試重點" >> changelog.md
+        echo "- 簡繁轉換功能是否正常運作" >> changelog.md
+        echo "- 官網文章生成功能是否正確" >> changelog.md
+        echo "- 彈出視窗介面是否正常顯示" >> changelog.md
+        
+        # 設定輸出
+        echo "changelog<<EOF" >> $GITHUB_OUTPUT
+        cat changelog.md >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+        
+    - name: 建立 GitHub Release
+      uses: actions/create-release@v1
+      id: create_release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref_name }}
+        release_name: Release ${{ github.ref_name }}
+        body: ${{ steps.changelog.outputs.changelog }}
+        draft: false
+        prerelease: false
+        
+    - name: 上傳 Release 檔案
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ needs.build.outputs.package-name }}
+        asset_name: ${{ needs.build.outputs.package-name }}
+        asset_content_type: application/zip
+        
+    - name: 發布成功通知
+      if: success()
+      run: |
+        curl -X POST "${{ secrets.WEBHOOK_URL }}" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "text": "🎉 新版本已發布到 GitHub Release",
+            "attachments": [{
+              "color": "good",
+              "fields": [
+                {"title": "版本", "value": "${{ github.ref_name }}", "short": true},
+                {"title": "下載連結", "value": "${{ steps.create_release.outputs.html_url }}", "short": false}
+              ]
+            }]
+          }'
+          
+    - name: 發布失敗通知
+      if: failure()
+      run: |
+        curl -X POST "${{ secrets.WEBHOOK_URL }}" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "text": "❌ GitHub Release 建立失敗",
+            "attachments": [{
+              "color": "danger",
+              "fields": [
+                {"title": "版本", "value": "${{ github.ref_name }}", "short": true},
+                {"title": "錯誤", "value": "請檢查發布日誌並手動建立 Release", "short": false}
+              ]
+            }]
+          }'

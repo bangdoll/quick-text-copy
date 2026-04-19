@@ -1,23 +1,19 @@
 {
   "manifest_version": 3,
-  "name": "Quick Text Copy",
-  "version": "1.0.5",
-  "description": "快速複製當前頁面的標題和網址到剪貼簿，格式：標題 網址",
-  "author": "Chrome Extension Developer",
+  "name": "Quick Text Copy (Professional)",
+  "version": "1.2.0",
+  "description": "專業版：整合 OpenCC 引擎，支援本地精準簡繁轉換。一鍵複製網頁標題與網址。",
+  "author": "Quick Text Copy Team",
   "permissions": [
     "activeTab",
     "scripting",
-    "contextMenus",
     "notifications"
   ],
-  "permissions_description": "此擴充功能需要 activeTab 權限來讀取當前分頁的標題和網址，以及 scripting 權限來執行複製到剪貼簿的功能。我們不會收集或儲存任何個人資料。",
   "action": {
-    "default_title": "複製頁面資訊",
-    "default_popup": ""
+    "default_title": "快速複製 (OpenCC 轉換)"
   },
   "background": {
-    "service_worker": "service-worker.js",
-    "type": "module"
+    "service_worker": "src/service-worker.js"
   },
   "icons": {
     "16": "icons/icon16.png",
