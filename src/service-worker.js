@@ -37,49 +37,57 @@ async function performCopy(tab) {
   try {
     Logger.info('開始複製流程', { tabId: tab.id, url: tab.url });
 
-    // 1. 注入 OpenCC 函式庫 (本地檔案)
+    // 1. 注入 OpenCC 函式庫
     await chrome.scripting.executeScript({
       target: { tabId: tab.id },
       files: ['lib/opencc.js']
     });
 
-    // 2. 注入並執行轉換邏輯
+    // 2. 執行轉換與複製邏輯
     const results = await chrome.scripting.executeScript({
       target: { tabId: tab.id },
       func: (originalTitle, originalUrl) => {
-        return new Promise((resolve) => {
-          try {
-            // 初始化 OpenCC (s2t: 簡體到繁體標準)
-            const converter = new OpenCC('s2t.json');
-            
-            // 轉換標題 (過濾掉常見的數字前綴，如 (3) )
-            const cleanTitle = originalTitle.trim().replace(/^\(\d+\)\s*/, '');
-            
-            // 執行轉換
-            converter.convertPromise(cleanTitle).then(convertedTitle => {
-              const finalTitle = convertedTitle || cleanTitle;
-              const formattedText = `${finalTitle} ${originalUrl}`;
-
-              // 複製到剪貼簿
-              const textarea = document.createElement('textarea');
-              textarea.value = formattedText;
-              textarea.style.position = 'fixed';
-              textarea.style.opacity = '0';
-              document.body.appendChild(textarea);
-              textarea.select();
-              const success = document.execCommand('copy');
-              document.body.removeChild(textarea);
-
-              resolve({
-                success,
-                text: formattedText,
-                method: 'opencc-js-local'
-              });
-            });
-          } catch (err) {
-            resolve({ success: false, error: err.message });
+        try {
+          // 檢查 OpenCC 是否正確加載
+          if (typeof OpenCC === 'undefined') {
+            throw new Error('OpenCC 函式庫未正確載入');
           }
-        });
+
+          // 初始化轉換器 (簡轉繁)
+          // 根據 lib/opencc.js 內容，使用內建的工廠方法
+          // 注意：本專案 lib/opencc.js 已內建字典，無需額外 fetch
+          let converter;
+          if (typeof OpenCC.Converter === 'function') {
+            converter = OpenCC.Converter({ from: 's', to: 't' });
+          } else {
+            // 防呆處理
+            throw new Error('找不到 OpenCC.Converter 方法');
+          }
+          
+          // 轉換標題 (過濾數字前綴，如 (3) )
+          const cleanTitle = originalTitle.trim().replace(/^\(\d+\)\s*/, '');
+          const convertedTitle = converter(cleanTitle);
+          const formattedText = `${convertedTitle} ${originalUrl}`;
+
+          // 使用最可靠的複製方式：建立臨時元素並執行 copy
+          // navigator.clipboard 在未聚焦分頁或 HTTP 網頁上可能失敗
+          const textarea = document.createElement('textarea');
+          textarea.value = formattedText;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          const success = document.execCommand('copy');
+          document.body.removeChild(textarea);
+
+          return {
+            success: success,
+            text: formattedText,
+            error: success ? null : 'execCommand 失敗'
+          };
+        } catch (err) {
+          return { success: false, error: err.message };
+        }
       },
       args: [tab.title, tab.url]
     });
@@ -87,14 +95,15 @@ async function performCopy(tab) {
     if (results && results[0] && results[0].result && results[0].result.success) {
       const text = results[0].result.text;
       Logger.info('複製成功', text);
-      await showNotification('✓ 複製成功 (專業版)', `已轉換並複製：${text.substring(0, 40)}...`);
+      await showNotification('✓ 複製成功 (專業版)', `已轉換：${text.substring(0, 40)}...`);
     } else {
-      throw new Error(results?.[0]?.result?.error || '腳本執行失敗');
+      const errorMsg = results?.[0]?.result?.error || '腳本執行無回應';
+      throw new Error(errorMsg);
     }
 
   } catch (error) {
     Logger.error('流程失敗', error);
-    await showNotification('✗ 複製失敗', `原因：${error.message}\n請嘗試重新整理頁面。`, 'error');
+    await showNotification('✗ 複製失敗', `原因：${error.message}`, 'error');
   }
 }
 
