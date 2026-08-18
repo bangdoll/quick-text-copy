@@ -46,7 +46,7 @@ async function performCopy(tab) {
     // 2. 執行轉換與複製邏輯
     const results = await chrome.scripting.executeScript({
       target: { tabId: tab.id },
-      func: (originalTitle, originalUrl) => {
+      func: async (originalTitle, originalUrl) => {
         try {
           // 檢查 OpenCC 是否正確加載
           if (typeof OpenCC === 'undefined') {
@@ -58,16 +58,33 @@ async function performCopy(tab) {
           // 注意：本專案 lib/opencc.js 已內建字典，無需額外 fetch
           let converter;
           if (typeof OpenCC.Converter === 'function') {
-            converter = OpenCC.Converter({ from: 's', to: 't' });
+            converter = OpenCC.Converter({ from: 'cn', to: 'tw' });
           } else {
             // 防呆處理
             throw new Error('找不到 OpenCC.Converter 方法');
           }
           
           // 轉換標題 (過濾數字前綴，如 (3) )
-          const cleanTitle = originalTitle.trim().replace(/^\(\d+\)\s*/, '');
+          const cleanTitle = String(originalTitle || '').trim().replace(/^\(\d+\)\s*/, '');
           const convertedTitle = converter(cleanTitle);
           const formattedText = `${convertedTitle} ${originalUrl}`;
+
+          const clipboard = typeof navigator !== 'undefined' ? navigator.clipboard : undefined;
+          let clipboardError = null;
+          if (clipboard && typeof clipboard.writeText === 'function') {
+            try {
+              await clipboard.writeText(formattedText);
+              return {
+                success: true,
+                text: formattedText,
+                error: null,
+                method: 'clipboard'
+              };
+            } catch (error) {
+              // Clipboard API 受頁面安全內容或權限限制時，繼續使用 fallback。
+              clipboardError = error;
+            }
+          }
 
           // 使用最可靠的複製方式：建立臨時元素並執行 copy
           // navigator.clipboard 在未聚焦分頁或 HTTP 網頁上可能失敗
@@ -81,9 +98,19 @@ async function performCopy(tab) {
           document.body.removeChild(textarea);
 
           return {
-            success: success,
+            success,
             text: formattedText,
-            error: success ? null : 'execCommand 失敗'
+            error: success
+              ? null
+              : [
+                  clipboardError
+                    ? `Clipboard API 失敗：${clipboardError.message || clipboardError}`
+                    : null,
+                  'execCommand 失敗'
+                ]
+                  .filter(Boolean)
+                  .join('；'),
+            method: 'execCommand'
           };
         } catch (err) {
           return { success: false, error: err.message };
