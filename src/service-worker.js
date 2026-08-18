@@ -1,5 +1,5 @@
 /**
- * Quick Text Copy - Service Worker (v1.2.0)
+ * Quick Text Copy - Service Worker (v1.2.3)
  * 整合專業 OpenCC-JS 引擎，支援本地精準簡繁轉換
  */
 
@@ -147,4 +147,4 @@ chrome.action.onClicked.addListener((tab) => {
   performCopy(tab);
 });
 
-Logger.info('Quick Text Copy v1.2.0 (專業版) 已啟動');
+Logger.info('Quick Text Copy v1.2.3 (專業版) 已啟動');
