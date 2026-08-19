@@ -1,14 +1,15 @@
 {
   "manifest_version": 3,
   "name": "Quick Text Copy (Professional)",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "專業版：整合 OpenCC 引擎，支援本地精準簡繁轉換。一鍵複製網頁標題與網址。",
   "author": "Quick Text Copy Team",
   "permissions": [
     "activeTab",
     "scripting",
     "notifications",
-    "clipboardWrite"
+    "clipboardWrite",
+    "storage"
   ],
   "action": {
     "default_title": "快速複製 (OpenCC 轉換)"
